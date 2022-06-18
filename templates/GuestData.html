@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Wedding Manager
+{% endblock title %}
+
+
+{% block body %}
+<div class="container">
+    <h2>{{SheetName}}</h2>
+    <table class="table-bordered" id="GuestData" style="border: spacing 10px;">
+        <tr>
+            <td> </td> 
+            {% for col in range(1, sheet.max_column + 1): %}
+            <div class="row" style ="font:bold">
+                <td style="padding: 2em;outline: 1px;">
+                    <h4 style="font:bold">{{ sheet.cell(1, col).value }}</h4>
+                </td>
+            </div>
+            {% endfor %}
+        </tr>
+        {% for row in range(2, sheet.max_row + 1) %}
+        
+        <tr>
+           <td id={{row}}>  <button class="btn Edit" data-toggle="modal" data-target="#myModal" data-id="{{row}}" 
+                  data-sheetname = "{{SheetName}}"
+                  data-member="{{ sheet.cell(row,1).value }}"
+                  data-groupid="{{ sheet.cell(row,2).value }}"
+                  data-mf="{{ sheet.cell(row,3).value }}"
+                  data-plus="{{ sheet.cell(row,4).value }}"
+                  data-expected="{{ sheet.cell(row,5).value }}"
+                  data-date="{{ sheet.cell(row,6).value }}"
+                  data-total="{{ sheet.cell(row,7).value }}"
+                  >Edit</button> </td> 
+          {% for col in range(1, sheet.max_column + 1): %}
+          <td style="outline: 1px;" id={{row}},{{col}}>{{ sheet.cell(row, col).value }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <form action = "/EditSheet" method = "post">
+        <!-- Modal content-->
+            <div class="w3-modal-content w3-card-4">
+                <div class="header w3-container w3-teal">
+                    <button type="button" class="w3-button w3-display-topright" data-dismiss="modal">&times;</button>
+                    <h4 id="modal_header">Edit Details for Row No : <span id="rowno" readonly="readonly"></span>  of <span id="sheetname" name="sheetname" readonly="readonly"></span> List</h4>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="form-group row" type="hidden">
+                        <input type="hidden"  id="rowinput" name="row" ></input>
+                        <input type="hidden" id="sheet" name="sheet" ></input>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-4" >Member Name :</label>
+                        <input class="col-sm-4" id="member" name="membername"></input>
+                    </div>
+                    <div class="form-group row">
+                        <label  class="col-sm-4">Group ID :</label>
+                        <input  class="col-sm-4" id="groupid" name="group"></input> 
+                    </div>
+                    <div class="form-group row">
+                        <label  class="col-sm-4">Male\Female :</label>
+                        <Select id="mfoption" class="col-sm-4" name="gender">
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </Select> 
+                        
+                    </div>
+                    <div class="form-group row">
+                        <label  class="col-sm-4">Plus Members :</label>
+                        <Select id="plusoption" class="col-sm-4"name="plusmember"> 
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </Select> 
+                        
+                    </div>
+                    <div class="form-group row">
+                        <label  class="col-sm-4">Expected :</label>
+                        <Select id="expected" name="excepted" class="col-sm-4">
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </Select> 
+                        
+                    </div>
+                    <div class="form-group row">
+
+                        <label  class="col-sm-4">Arrival Date :</label>
+                        <input  class="col-sm-4" type="datetime-local" id="Test_DatetimeLocal" name="arrivaldate"></input> 
+                    </div>
+
+                </div>
+                <div class="modal-footer w3-container w3-teal">
+                    <input type = "submit"  style="background-color:forestgreen;border-style: none;" value = "Save" />
+                    <button type="button" class="btn btn-danger pt-3" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form> 
+        </div>
+    </div>
+
+</div>
+<script>
+    
+$('#myModal').on('show.bs.modal', function (event) {
+   
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    
+    var rowno = button.data('id') // Extract info from data-* attributes
+    var sheetname = button.data('sheetname')
+   
+    var datarow = button.data('member')
+    var modal = $(this)
+    modal.find('#rowno').text(rowno)
+    modal.find("#rowinput").val(rowno)
+    modal.find('#sheetname').text(sheetname)
+    modal.find("#sheet").val(sheetname) 
+    modal.find('#member').val( datarow)
+    modal.find('#groupid').val( button.data('groupid') )
+    modal.find('#mfoption').val( button.data('mf') )
+    modal.find('#plusoption').val( button.data('plus') )
+    modal.find('#expected').val( button.data('expected') )
+    modal.find('#Test_DatetimeLocal').val( '2022-06-09T12:29' )
+    
+  })
+
+</script>
+
+
+{% endblock body %}

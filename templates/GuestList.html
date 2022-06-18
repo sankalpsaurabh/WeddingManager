@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Wedding Manager
+{% endblock title %}
+
+
+{% block body %}
+<div>
+    <table>
+        {% for table in Tables %}
+        <tr>
+            <td>
+                <div>
+                    <a style="font-size: large;font: bold ;font-style: unset;" href="\GuestData\{{table}}">{{table}}</a>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+{% endblock body %}
